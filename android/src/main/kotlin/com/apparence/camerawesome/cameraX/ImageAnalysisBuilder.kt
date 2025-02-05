@@ -7,6 +7,7 @@ import androidx.camera.core.AspectRatio
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.internal.utils.ImageUtil
+import com.apparence.camerawesome.utils.CameraLogger
 import com.apparence.camerawesome.utils.ResettableCountDownLatch
 import io.flutter.plugin.common.EventChannel
 import kotlinx.coroutines.*
@@ -15,7 +16,7 @@ import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 enum class OutputImageFormat {
-    JPEG, YUV_420_888, NV21,
+    JPEG, YUV_420_888, NV21, RGBA_8888
 }
 
 class ImageAnalysisBuilder private constructor(
@@ -62,10 +63,13 @@ class ImageAnalysisBuilder private constructor(
 
     @SuppressLint("RestrictedApi")
     fun build(): ImageAnalysis {
+        CameraLogger.debug("IMAGE FORMAT INPUT: $format", "build")
+        val outputImageFormat = if (format == OutputImageFormat.RGBA_8888) ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888 else ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888
+        CameraLogger.debug("IMAGE ANALYZISZ FORMAT: $outputImageFormat", "build")
         countDownLatch.reset()
         val imageAnalysis = ImageAnalysis.Builder().setTargetResolution(Size(width, height))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888).build()
+            .setOutputImageFormat(outputImageFormat).build()
         imageAnalysis.setAnalyzer(Dispatchers.IO.asExecutor()) { imageProxy ->
             if (previewStreamSink == null) {
                 return@setAnalyzer
@@ -99,6 +103,12 @@ class ImageAnalysisBuilder private constructor(
                     imageMap["nv21Image"] = nv21Image
                     imageMap["planes"] = planes
                     imageMap["cropRect"] = cropRect(imageProxy)
+                    executor.execute { previewStreamSink?.success(imageMap) }
+                }
+                OutputImageFormat.RGBA_8888 -> {
+                    val planes = imagePlanesAdapter(imageProxy)
+                    val imageMap = imageProxyBaseAdapter(imageProxy)
+                    imageMap["planes"] = planes
                     executor.execute { previewStreamSink?.success(imageMap) }
                 }
             }
