@@ -49,6 +49,11 @@ extension Bgra8888Converter on Bgra8888Image {
       wrappedValue,
       jpegQuality,
     );
+    print(wrappedImage.bytes);
+    print(wrappedImage.format);
+    print(wrappedImage.planes);
+    print(wrappedImage.cropRect);
+    print(wrappedImage.rotation);
     return wrappedImage.unwrap() as JpegImage;
   }
 }
@@ -124,6 +129,9 @@ extension AnalysisUnwrapper on AnalysisImageWrapper {
           rotation: InputAnalysisImageRotation.values.byName(rotation!.name),
         );
       case AnalysisImageFormat.jpeg:
+        print ("Jpeg unwrapped");
+        print (rotation);
+        print(cropRect);
         return JpegImage(
           height: height,
           width: width,
