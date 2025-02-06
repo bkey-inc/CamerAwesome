@@ -15,5 +15,3 @@ google-services.json
 android/gradlew
 android/gradlew.bat
 android/gradle/wrapper/gradle-wrapper.jar
-
-android/src/main/kotlin/com/apparence/camerawesome/utils/CameraLogger.kt
