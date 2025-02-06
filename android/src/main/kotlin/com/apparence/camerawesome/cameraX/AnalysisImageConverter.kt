@@ -3,7 +3,6 @@ package com.apparence.camerawesome.cameraX
 import android.graphics.ImageFormat
 import android.graphics.Rect
 import android.graphics.YuvImage
-import com.apparence.camerawesome.utils.CameraLogger
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import kotlin.math.min
@@ -196,7 +195,6 @@ class AnalysisImageConverter : AnalysisImageUtils {
         try {
             val width = bgra8888image.width.toInt()
             val height = bgra8888image.height.toInt()
-            CameraLogger.log("Width: $width and height: $height")
             
             // Create a bitmap with ARGB_8888 config (Android's internal format)
             val bitmap = android.graphics.Bitmap.createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888)

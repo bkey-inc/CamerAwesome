@@ -7,7 +7,6 @@ import androidx.camera.core.AspectRatio
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.internal.utils.ImageUtil
-import com.apparence.camerawesome.utils.CameraLogger
 import com.apparence.camerawesome.utils.ResettableCountDownLatch
 import io.flutter.plugin.common.EventChannel
 import kotlinx.coroutines.*
@@ -63,9 +62,7 @@ class ImageAnalysisBuilder private constructor(
 
     @SuppressLint("RestrictedApi")
     fun build(): ImageAnalysis {
-        CameraLogger.debug("IMAGE FORMAT INPUT: $format", "build")
         val outputImageFormat = if (format == OutputImageFormat.RGBA_8888) ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888 else ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888
-        CameraLogger.debug("IMAGE ANALYZISZ FORMAT: $outputImageFormat", "build")
         countDownLatch.reset()
         val imageAnalysis = ImageAnalysis.Builder().setTargetResolution(Size(width, height))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)

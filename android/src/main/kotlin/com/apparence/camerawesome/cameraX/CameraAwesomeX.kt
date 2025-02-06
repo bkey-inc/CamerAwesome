@@ -28,7 +28,6 @@ import com.apparence.camerawesome.buttons.PhysicalButtonsHandler
 import com.apparence.camerawesome.buttons.PlayerService
 import com.apparence.camerawesome.models.FlashMode
 import com.apparence.camerawesome.sensors.SensorOrientationListener
-import com.apparence.camerawesome.utils.CameraLogger
 import com.apparence.camerawesome.utils.isMultiCamSupported
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -196,14 +195,8 @@ class CameraAwesomeX : CameraInterface, FlutterPlugin, ActivityAware {
                         "YUV_420" -> OutputImageFormat.YUV_420_888
                         "NV21" -> OutputImageFormat.NV21
                         "JPEG" -> OutputImageFormat.JPEG
-                        "BGRA8888" -> {
-                            CameraLogger.debug("Converting BGRA_8888 to RGBA_8888", "setupImageAnalysisStream")
-                            OutputImageFormat.RGBA_8888
-                        }
-                        else -> {
-                            CameraLogger.debug("FALLBACK NV21", "setupImageAnalysisStream")
-                            OutputImageFormat.NV21
-                        }
+                        "BGRA8888" -> OutputImageFormat.RGBA_8888
+                        else -> OutputImageFormat.NV21
                     },
                     executor(activity!!), width,
                     maxFramesPerSecond = maxFramesPerSecond,
