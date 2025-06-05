@@ -1,13 +1,13 @@
-import 'package:camerawesome/camerawesome_plugin.dart';
+import 'package:camerawesome/camerawesome_plugin.dart' as CameraAwesome;
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
 class BarcodePreviewOverlay extends StatefulWidget {
-  final CameraState state;
+  final CameraAwesome.CameraState state;
   final List<Barcode> barcodes;
-  final AnalysisImage? analysisImage;
+  final CameraAwesome.AnalysisImage? analysisImage;
   final bool isBackCamera;
-  final Preview preview;
+  final CameraAwesome.Preview preview;
 
   const BarcodePreviewOverlay({
     super.key,
@@ -35,10 +35,10 @@ class _BarcodePreviewOverlayState extends State<BarcodePreviewOverlay> {
   bool? _barcodeInArea;
 
   // The image that was used to detect the barcode
-  AnalysisImage? img;
+  CameraAwesome.AnalysisImage? img;
 
   // The transformation that was used to display the image correctly (Android only)
-  CanvasTransformation? canvasTransformation;
+  CameraAwesome.CanvasTransformation? canvasTransformation;
 
   @override
   void initState() {
@@ -125,7 +125,7 @@ class _BarcodePreviewOverlayState extends State<BarcodePreviewOverlay> {
 
   /// Detects if one of the [barcodes] is in the [_scanArea] and updates UI
   /// accordingly.
-  Future _detectBarcodeInArea(AnalysisImage img, List<Barcode> barcodes) async {
+  Future _detectBarcodeInArea(CameraAwesome.AnalysisImage img, List<Barcode> barcodes) async {
     try {
       String? barcodeRead;
       _barcodeInArea = null;
@@ -194,7 +194,7 @@ class _BarcodePreviewOverlayState extends State<BarcodePreviewOverlay> {
 class BarcodeFocusAreaPainter extends CustomPainter {
   final Size scanArea;
   final Rect? barcodeRect;
-  final CanvasTransformation? canvasTransformation;
+  final CameraAwesome.CanvasTransformation? canvasTransformation;
 
   BarcodeFocusAreaPainter({
     required this.scanArea,

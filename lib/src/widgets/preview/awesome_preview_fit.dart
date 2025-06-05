@@ -1,21 +1,21 @@
 import 'dart:math';
 
-import 'package:camerawesome/camerawesome_plugin.dart';
+import 'package:camerawesome/camerawesome_plugin.dart' as CameraAwesome;
 import 'package:camerawesome/pigeon.dart';
 import 'package:flutter/material.dart';
 
 final previewWidgetKey = GlobalKey();
 
-typedef OnPreviewCalculated = void Function(Preview preview);
+typedef OnPreviewCalculated = void Function(CameraAwesome.Preview preview);
 
 class AnimatedPreviewFit extends StatefulWidget {
   final Alignment alignment;
-  final CameraPreviewFit previewFit;
+  final CameraAwesome.CameraPreviewFit previewFit;
   final PreviewSize previewSize;
   final BoxConstraints constraints;
   final Widget child;
   final OnPreviewCalculated? onPreviewCalculated;
-  final Sensor sensor;
+  final CameraAwesome.Sensor sensor;
 
   const AnimatedPreviewFit({
     super.key,
@@ -85,7 +85,7 @@ class _AnimatedPreviewFitState extends State<AnimatedPreviewFit> {
   void _handPreviewCalculated() {
     if (widget.onPreviewCalculated != null) {
       widget.onPreviewCalculated!(
-        Preview(
+        CameraAwesome.Preview(
           nativePreviewSize: widget.previewSize.toSize(),
           previewSize: sizeCalculator!.maxSize,
           offset: sizeCalculator!.offset,
@@ -131,7 +131,7 @@ class _AnimatedPreviewFitState extends State<AnimatedPreviewFit> {
 class PreviewFitWidget extends StatelessWidget {
   final Alignment alignment;
   final BoxConstraints constraints;
-  final CameraPreviewFit previewFit;
+  final CameraAwesome.CameraPreviewFit previewFit;
   final PreviewSize previewSize;
   final Widget child;
   final double scale;
@@ -182,7 +182,7 @@ class PreviewFitWidget extends StatelessWidget {
 }
 
 class PreviewSizeCalculator {
-  final CameraPreviewFit previewFit;
+  final CameraAwesome.CameraPreviewFit previewFit;
   final PreviewSize previewSize;
   final BoxConstraints constraints;
 
@@ -232,15 +232,15 @@ class PreviewSizeCalculator {
     final hDiff = nativePreviewSize.height - nativeHeightProjection;
 
     switch (previewFit) {
-      case CameraPreviewFit.fitWidth:
+      case CameraAwesome.CameraPreviewFit.fitWidth:
         maxSize = Size(constraints.maxWidth, nativePreviewSize.height * zoom);
         _offset = Offset(0, constraints.maxHeight - maxSize.height);
         break;
-      case CameraPreviewFit.fitHeight:
+      case CameraAwesome.CameraPreviewFit.fitHeight:
         maxSize = Size(nativePreviewSize.width * zoom, constraints.maxHeight);
         _offset = Offset(constraints.maxWidth - maxSize.width, 0);
         break;
-      case CameraPreviewFit.cover:
+      case CameraAwesome.CameraPreviewFit.cover:
         maxSize = Size(constraints.maxWidth, constraints.maxHeight);
 
         if (constraints.maxWidth / constraints.maxHeight >
@@ -252,7 +252,7 @@ class PreviewSizeCalculator {
           // _offset = Offset(constraints.maxWidth - maxSize.width, 0);
         }
         break;
-      case CameraPreviewFit.contain:
+      case CameraAwesome.CameraPreviewFit.contain:
         maxSize = Size(
             nativePreviewSize.width * zoom, nativePreviewSize.height * zoom);
         _offset = Offset(
@@ -277,13 +277,13 @@ class PreviewSizeCalculator {
     var nativePreviewSize = previewSize.toSize();
 
     switch (previewFit) {
-      case CameraPreviewFit.fitWidth:
+      case CameraAwesome.CameraPreviewFit.fitWidth:
         ratio = constraints.maxWidth / nativePreviewSize.width; // 800 / 960
         break;
-      case CameraPreviewFit.fitHeight:
+      case CameraAwesome.CameraPreviewFit.fitHeight:
         ratio = constraints.maxHeight / nativePreviewSize.height; // 1220 / 1280
         break;
-      case CameraPreviewFit.cover:
+      case CameraAwesome.CameraPreviewFit.cover:
         if (constraints.maxWidth / constraints.maxHeight >
             nativePreviewSize.width / nativePreviewSize.height) {
           ratio = constraints.maxWidth / nativePreviewSize.width;
@@ -291,7 +291,7 @@ class PreviewSizeCalculator {
           ratio = constraints.maxHeight / nativePreviewSize.height;
         }
         break;
-      case CameraPreviewFit.contain:
+      case CameraAwesome.CameraPreviewFit.contain:
         final ratioW = constraints.maxWidth / nativePreviewSize.width;
         final ratioH = constraints.maxHeight / nativePreviewSize.height;
         final minRatio = min(ratioW, ratioH);
