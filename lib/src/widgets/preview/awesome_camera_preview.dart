@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:camerawesome/camerawesome_plugin.dart';
+import 'package:camerawesome/camerawesome_plugin.dart' as CameraAwesome;
 import 'package:camerawesome/pigeon.dart';
 import 'package:camerawesome/src/widgets/preview/awesome_preview_fit.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,14 +20,15 @@ enum CameraPreviewFit {
 class AwesomeCameraPreview extends StatefulWidget {
   final CameraPreviewFit previewFit;
   final Widget? loadingWidget;
-  final CameraState state;
-  final OnPreviewTap? onPreviewTap;
-  final OnPreviewScale? onPreviewScale;
-  final CameraLayoutBuilder interfaceBuilder;
-  final CameraLayoutBuilder? previewDecoratorBuilder;
+  final CameraAwesome.CameraState state;
+  final CameraAwesome.OnPreviewTap? onPreviewTap;
+  final CameraAwesome.OnPreviewScale? onPreviewScale;
+  final CameraAwesome.CameraLayoutBuilder interfaceBuilder;
+  final CameraAwesome.CameraLayoutBuilder? previewDecoratorBuilder;
   final EdgeInsets padding;
   final Alignment alignment;
-  final PictureInPictureConfigBuilder? pictureInPictureConfigBuilder;
+  final CameraAwesome.PictureInPictureConfigBuilder?
+      pictureInPictureConfigBuilder;
 
   const AwesomeCameraPreview({
     super.key,
@@ -58,9 +59,9 @@ class AwesomeCameraPreviewState extends State<AwesomeCameraPreview> {
 
   StreamSubscription? _sensorConfigSubscription;
   StreamSubscription? _aspectRatioSubscription;
-  CameraAspectRatios? _aspectRatio;
+  CameraAwesome.CameraAspectRatios? _aspectRatio;
   double? _aspectRatioValue;
-  Preview? _preview;
+  CameraAwesome.Preview? _preview;
 
   // TODO: fetch this value from the native side
   final int kMaximumSupportedFloatingPreview = 3;
@@ -90,13 +91,13 @@ class AwesomeCameraPreviewState extends State<AwesomeCameraPreview> {
           setState(() {
             _aspectRatio = event;
             switch (event) {
-              case CameraAspectRatios.ratio_16_9:
+              case CameraAwesome.CameraAspectRatios.ratio_16_9:
                 _aspectRatioValue = 16 / 9;
                 break;
-              case CameraAspectRatios.ratio_4_3:
+              case CameraAwesome.CameraAspectRatios.ratio_4_3:
                 _aspectRatioValue = 4 / 3;
                 break;
-              case CameraAspectRatios.ratio_1_1:
+              case CameraAwesome.CameraAspectRatios.ratio_1_1:
                 _aspectRatioValue = 1;
                 break;
             }
@@ -175,10 +176,10 @@ class AwesomeCameraPreviewState extends State<AwesomeCameraPreview> {
                       }
                     });
                   },
-                  child: AwesomeCameraGestureDetector(
+                  child: CameraAwesome.AwesomeCameraGestureDetector(
                     onPreviewTapBuilder:
                         widget.onPreviewTap != null && _previewSize != null
-                            ? OnPreviewTapBuilder(
+                            ? CameraAwesome.OnPreviewTapBuilder(
                                 pixelPreviewSizeGetter: () => _previewSize!,
                                 flutterPreviewSizeGetter: () =>
                                     _previewSize!, //croppedPreviewSize,
@@ -187,12 +188,13 @@ class AwesomeCameraPreviewState extends State<AwesomeCameraPreview> {
                             : null,
                     onPreviewScale: widget.onPreviewScale,
                     initialZoom: widget.state.sensorConfig.zoom,
-                    child: StreamBuilder<AwesomeFilter>(
+                    child: StreamBuilder<CameraAwesome.AwesomeFilter>(
                       //FIX performances
                       stream: widget.state.filter$,
                       builder: (context, snapshot) {
                         return snapshot.hasData &&
-                                snapshot.data != AwesomeFilter.None
+                                snapshot.data !=
+                                    CameraAwesome.AwesomeFilter.None
                             ? ColorFiltered(
                                 colorFilter: snapshot.data!.preview,
                                 child: _textures.first,
@@ -244,14 +246,14 @@ class AwesomeCameraPreviewState extends State<AwesomeCameraPreview> {
 
       final texture = _textures[i];
       final sensor = sensors[kDebugMode ? 0 : i];
-      final frame = AwesomeCameraFloatingPreview(
+      final frame = CameraAwesome.AwesomeCameraFloatingPreview(
         index: i,
         sensor: sensor,
         texture: texture,
         aspectRatio: 1 / _aspectRatioValue!,
         pictureInPictureConfig:
             widget.pictureInPictureConfigBuilder?.call(i, sensor) ??
-                PictureInPictureConfig(
+                CameraAwesome.PictureInPictureConfig(
                   startingPosition: Offset(
                     i * 20,
                     MediaQuery.of(context).padding.top + 60 + (i * 20),

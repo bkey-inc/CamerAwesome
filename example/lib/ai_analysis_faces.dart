@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:camera_app/utils/mlkit_utils.dart';
-import 'package:camerawesome/camerawesome_plugin.dart';
+import 'package:camerawesome/camerawesome_plugin.dart' as CameraAwesome;
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:rxdart/rxdart.dart';
@@ -40,7 +40,7 @@ class CameraPage extends StatefulWidget {
 
 class _CameraPageState extends State<CameraPage> {
   final _faceDetectionController = BehaviorSubject<FaceDetectionModel>();
-  Preview? _preview;
+  CameraAwesome.Preview? _preview;
 
   final options = FaceDetectorOptions(
     enableContours: true,
@@ -63,15 +63,15 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CameraAwesomeBuilder.previewOnly(
-        previewFit: CameraPreviewFit.contain,
-        sensorConfig: SensorConfig.single(
-          sensor: Sensor.position(SensorPosition.front),
-          aspectRatio: CameraAspectRatios.ratio_1_1,
+      body: CameraAwesome.CameraAwesomeBuilder.previewOnly(
+        previewFit: CameraAwesome.CameraPreviewFit.contain,
+        sensorConfig: CameraAwesome.SensorConfig.single(
+          sensor: CameraAwesome.Sensor.position(CameraAwesome.SensorPosition.front),
+          aspectRatio: CameraAwesome.CameraAspectRatios.ratio_1_1,
         ),
         onImageForAnalysis: (img) => _analyzeImage(img),
-        imageAnalysisConfig: AnalysisConfig(
-          androidOptions: const AndroidAnalysisOptions.nv21(
+        imageAnalysisConfig: CameraAwesome.AnalysisConfig(
+          androidOptions: const CameraAwesome.AndroidAnalysisOptions.nv21(
             width: 250,
           ),
           maxFramesPerSecond: 5,
@@ -88,7 +88,7 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
-  Future _analyzeImage(AnalysisImage img) async {
+  Future _analyzeImage(CameraAwesome.AnalysisImage img) async {
     final inputImage = img.toInputImage();
 
     try {
@@ -109,7 +109,7 @@ class _CameraPageState extends State<CameraPage> {
 }
 
 class _MyPreviewDecoratorWidget extends StatelessWidget {
-  final CameraState cameraState;
+  final CameraAwesome.CameraState cameraState;
   final Stream<FaceDetectionModel> faceDetectionStream;
   final Preview preview;
 
@@ -154,8 +154,8 @@ class _MyPreviewDecoratorWidget extends StatelessWidget {
 
 class FaceDetectorPainter extends CustomPainter {
   final FaceDetectionModel model;
-  final CanvasTransformation? canvasTransformation;
-  final Preview? preview;
+  final CameraAwesome.CanvasTransformation? canvasTransformation;
+  final CameraAwesome.Preview? preview;
 
   FaceDetectorPainter({
     required this.model,
@@ -250,7 +250,7 @@ class FaceDetectionModel {
   final Size absoluteImageSize;
   final int rotation;
   final InputImageRotation imageRotation;
-  final AnalysisImage? img;
+  final CameraAwesome.AnalysisImage? img;
 
   FaceDetectionModel({
     required this.faces,
