@@ -1,6 +1,21 @@
-# 2.1.O
+# 2.2.1
+
+- Version bump for maintenance release
+
+# 2.2.0
+
+- ✨ Add RGBA8888 support for image analysis
+- ⬆️ Replace carousel_slider_plus with carousel_slider 5.0.0 (Thanks to
+  @millerf)
+- ⬆️ Update gradle wrapper and other dependencies
+- 🐛 Fix flutter analyze errors
+- 🐛 Various Android gradle and build improvements
+
+# 2.1.0
+
 - Update for flutter 3.24.0
-- Update dependencies (Thank you @tonistayhungrystayfoolish / @bytemaster / @millerf for the PR) 
+- Update dependencies (Thank you @tonistayhungrystayfoolish / @bytemaster /
+  @millerf for the PR)
 
 # 2.0.1
 
